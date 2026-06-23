@@ -1,3 +1,5 @@
+// Task 1 : SelfIntroduction
+
 // import SelfIntroduction from './SelfIntroduction';
 
 // function App() {
@@ -11,11 +13,24 @@
 // export default App;
 
 
-import SelfIntroduction from "./SelfIntroduction";
+// import SelfIntroduction from "./SelfIntroduction";
+// import "./App.css";
+
+// function App() {
+//   return <SelfIntroduction />;
+// }
+
+// export default App;
+
+
+
+// Task 2 : Parent and Child components.
+
+import Parent from "./Parent";
 import "./App.css";
 
 function App() {
-  return <SelfIntroduction />;
+  return <Parent />;
 }
 
 export default App;

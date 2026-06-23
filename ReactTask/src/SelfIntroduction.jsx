@@ -1,3 +1,22 @@
+// function SelfIntroduction() {
+//   return (
+//     <div>
+//       <h1>Self Introduction</h1>
+
+//       <p><strong>Name:</strong> C Deepthi Prasanna</p>
+//       <p><strong>Education:</strong> B.Tech - Computer Science and Engineering</p>
+//       <p><strong>Skills:</strong> Java, JavaScript, React JS, HTML, CSS, GitHub, Node.js, SQL, Bootstrap</p>
+//       <p><strong>Location:</strong> Chittoor, Andhra Pradesh</p>
+//       <p><strong>Hobbies:</strong> Reading Books, Listening to Music, Learning New Technologies</p>
+//       <p><strong>Career Goal:</strong> To become a skilled Frontend Developer and build innovative web applications.</p>
+//     </div>
+//   );
+// }
+
+// export default SelfIntroduction;
+
+
+
 function SelfIntroduction() {
   return (
     <div className="container">

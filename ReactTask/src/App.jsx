@@ -1,3 +1,16 @@
+// import SelfIntroduction from './SelfIntroduction';
+
+// function App() {
+//   return (
+//     <div>
+//       <SelfIntroduction />
+//     </div>
+//   );
+// }
+
+// export default App;
+
+
 import SelfIntroduction from "./SelfIntroduction";
 import "./App.css";
 

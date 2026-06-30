@@ -183,7 +183,7 @@ body {
 
 /* Task 3 – Conditional Rendering & List Rendering */
 
-* {
+/* * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -204,8 +204,6 @@ body {
   min-height: 100vh;
   padding: 40px;
 }
-
-/* LOGIN */
 
 .login-card {
   width: 450px;
@@ -246,8 +244,6 @@ body {
   cursor: pointer;
   font-size: 17px;
 }
-
-/* DASHBOARD */
 
 .welcome-card {
   max-width: 900px;
@@ -297,8 +293,6 @@ body {
   background: #dc2626;
 }
 
-/* EMPLOYEE CARDS */
-
 .employee-grid {
   margin-top: 40px;
   display: grid;
@@ -340,4 +334,185 @@ body {
 .employee-card p {
   margin: 8px 0;
   color: #555;
+} */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Segoe UI", sans-serif;
+}
+
+.app {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(
+    135deg,
+    #4f46e5,
+    #7c3aed
+  );
+  padding: 20px;
+}
+
+.dark {
+  background: linear-gradient(
+    135deg,
+    #111827,
+    #1f2937
+  );
+}
+
+.card {
+  background: white;
+  width: 100%;
+  max-width: 500px;
+  padding: 40px;
+  border-radius: 25px;
+  text-align: center;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+}
+
+.dark .card {
+  background: #1f2937;
+  color: white;
+}
+
+h1 {
+  color: #4f46e5;
+  margin-bottom: 10px;
+}
+
+.dark h1 {
+  color: #818cf8;
+}
+
+.card p {
+  color: gray;
+}
+
+.dark .card p {
+  color: #d1d5db;
+}
+
+.counter-circle {
+  width: 150px;
+  height: 150px;
+  margin: 30px auto;
+  border-radius: 50%;
+  background: linear-gradient(
+    135deg,
+    #4f46e5,
+    #7c3aed
+  );
+  color: white;
+  font-size: 60px;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.status-box {
+  margin-bottom: 25px;
+}
+
+.status-box h3 {
+  margin-bottom: 10px;
+}
+
+.positive {
+  color: green;
+  font-weight: bold;
+}
+
+.negative {
+  color: red;
+  font-weight: bold;
+}
+
+.zero {
+  color: gray;
+  font-weight: bold;
+}
+
+.button-row {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 15px;
+}
+
+.button-row button {
+  flex: 1;
+}
+
+button {
+  border: none;
+  color: white;
+  padding: 14px;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: 0.3s;
+}
+
+button:hover {
+  transform: translateY(-3px);
+}
+
+.increment {
+  background: #22c55e;
+}
+
+.decrement {
+  background: #ef4444;
+}
+
+.reset {
+  width: 100%;
+  background: #2563eb;
+  margin-bottom: 15px;
+}
+
+.theme-btn {
+  width: 100%;
+  background: linear-gradient(
+    135deg,
+    #9333ea,
+    #c026d3
+  );
+}
+
+footer {
+  margin-top: 25px;
+  padding-top: 15px;
+  border-top: 1px solid #ddd;
+  font-size: 14px;
+  color: gray;
+}
+
+.dark footer {
+  border-color: #374151;
+  color: #d1d5db;
+}
+
+@media (max-width: 600px) {
+  .card {
+    padding: 25px;
+  }
+
+  .button-row {
+    flex-direction: column;
+  }
+
+  .counter-circle {
+    width: 120px;
+    height: 120px;
+    font-size: 45px;
+  }
+
+  h1 {
+    font-size: 32px;
+  }
 }

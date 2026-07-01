@@ -175,76 +175,351 @@
 // export default App;
 
 
+// import React, { useState } from "react";
+// import "./App.css";
+
+// function App() {
+//   const [count, setCount] = useState(0);
+//   const [darkMode, setDarkMode] = useState(false);
+
+//   const increment = () => {
+//     console.log("Increment Button Clicked");
+//     setCount(count + 1);
+//   };
+
+//   const decrement = () => {
+//     console.log("Decrement Button Clicked");
+//     setCount(count - 1);
+//   };
+
+//   const reset = () => {
+//     console.log("Counter Reset");
+//     setCount(0);
+//   };
+
+//   const toggleTheme = () => {
+//     console.log("Theme Changed");
+//     setDarkMode(!darkMode);
+//   };
+
+//   return (
+//     <div className={darkMode ? "app dark" : "app"}>
+//       <div className="card">
+//         <h1>Counter Dashboard</h1>
+//         <p>React useState Hook Implementation</p>
+
+//         <div className="counter-circle">
+//           {count}
+//         </div>
+
+//         <div className="status-box">
+//           <h3>Current Status</h3>
+
+//           {count > 0 ? (
+//             <p className="positive">🟢 Positive</p>
+//           ) : count < 0 ? (
+//             <p className="negative">🔴 Negative</p>
+//           ) : (
+//             <p className="zero">⚪ Zero</p>
+//           )}
+//         </div>
+
+//         <div className="button-row">
+//           <button className="increment" onClick={increment}>
+//             + Increment
+//           </button>
+
+//           <button className="decrement" onClick={decrement}>
+//             - Decrement
+//           </button>
+//         </div>
+
+//         <button className="reset" onClick={reset}>
+//           Reset Counter
+//         </button>
+
+//         <button className="theme-btn" onClick={toggleTheme}>
+//           {darkMode ? "☀️ Light Theme" : "🌙 Dark Theme"}
+//         </button>
+
+//         <footer>
+//           React Task 4 • Developed by Deepthi Prasanna
+//         </footer>
+//       </div>
+//     </div>
+//   );
+// }
+
+// export default App;
+
+/* Task 5: Registration Form using useState */
+
 import React, { useState } from "react";
 import "./App.css";
 
 function App() {
-  const [count, setCount] = useState(0);
-  const [darkMode, setDarkMode] = useState(false);
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    mobile: "",
+    password: "",
+    confirmPassword: "",
+    dob: "",
+    gender: "",
+    address: "",
+    city: "",
+  });
 
-  const increment = () => {
-    console.log("Increment Button Clicked");
-    setCount(count + 1);
+  const [errors, setErrors] = useState({});
+  const [successMessage, setSuccessMessage] = useState("");
+
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
   };
 
-  const decrement = () => {
-    console.log("Decrement Button Clicked");
-    setCount(count - 1);
+  const validateForm = () => {
+    let newErrors = {};
+
+    // First Name
+    if (formData.firstName.trim() === "") {
+      newErrors.firstName = "First Name is required";
+    } else if (formData.firstName.length < 3) {
+      newErrors.firstName = "Minimum 3 characters required";
+    }
+
+    // Last Name
+    if (formData.lastName.trim() === "") {
+      newErrors.lastName = "Last Name is required";
+    }
+
+    // Email
+    if (formData.email.trim() === "") {
+      newErrors.email = "Email is required";
+    } else if (
+      !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(formData.email)
+    ) {
+      newErrors.email = "Enter a valid email";
+    }
+
+    // Mobile
+    if (formData.mobile.trim() === "") {
+      newErrors.mobile = "Mobile Number is required";
+    } else if (!/^[0-9]{10}$/.test(formData.mobile)) {
+      newErrors.mobile = "Enter a valid 10-digit mobile number";
+    }
+
+    // Password
+    if (formData.password === "") {
+      newErrors.password = "Password is required";
+    } else if (formData.password.length < 8) {
+      newErrors.password = "Minimum 8 characters required";
+    }
+
+    // Confirm Password
+    if (formData.confirmPassword === "") {
+      newErrors.confirmPassword = "Confirm Password is required";
+    } else if (formData.password !== formData.confirmPassword) {
+      newErrors.confirmPassword = "Passwords do not match";
+    }
+
+    // Date of Birth
+    if (formData.dob === "") {
+      newErrors.dob = "Date of Birth is required";
+    }
+
+    // Gender
+    if (formData.gender === "") {
+      newErrors.gender = "Please select Gender";
+    }
+
+    // Address
+    if (formData.address.trim() === "") {
+      newErrors.address = "Address is required";
+    }
+
+    // City
+    if (formData.city.trim() === "") {
+      newErrors.city = "City is required";
+    }
+
+    setErrors(newErrors);
+
+    return Object.keys(newErrors).length === 0;
   };
 
-  const reset = () => {
-    console.log("Counter Reset");
-    setCount(0);
-  };
+  const handleSubmit = (event) => {
+    event.preventDefault();
 
-  const toggleTheme = () => {
-    console.log("Theme Changed");
-    setDarkMode(!darkMode);
+    if (validateForm()) {
+      console.log("Registration Successful");
+      console.log(formData);
+
+      setSuccessMessage("Registration Successful!");
+
+      setFormData({
+        firstName: "",
+        lastName: "",
+        email: "",
+        mobile: "",
+        password: "",
+        confirmPassword: "",
+        dob: "",
+        gender: "",
+        address: "",
+        city: "",
+      });
+
+      setErrors({});
+    } else {
+      setSuccessMessage("");
+    }
   };
 
   return (
-    <div className={darkMode ? "app dark" : "app"}>
-      <div className="card">
-        <h1>Counter Dashboard</h1>
-        <p>React useState Hook Implementation</p>
+    <div className="container">
+      <div className="form-card">
+        <h1>Registration Form</h1>
+        <p>Create your account</p>
 
-        <div className="counter-circle">
-          {count}
-        </div>
+        {successMessage && (
+          <div className="success-message">
+            {successMessage}
+          </div>
+        )}
 
-        <div className="status-box">
-          <h3>Current Status</h3>
+        <form onSubmit={handleSubmit}>
 
-          {count > 0 ? (
-            <p className="positive">🟢 Positive</p>
-          ) : count < 0 ? (
-            <p className="negative">🔴 Negative</p>
-          ) : (
-            <p className="zero">⚪ Zero</p>
-          )}
-        </div>
+          <div className="row">
+            <div className="input-group">
+              <label>First Name</label>
+              <input
+                type="text"
+                name="firstName"
+                value={formData.firstName}
+                onChange={handleChange}
+              />
+              <span>{errors.firstName}</span>
+            </div>
 
-        <div className="button-row">
-          <button className="increment" onClick={increment}>
-            + Increment
+            <div className="input-group">
+              <label>Last Name</label>
+              <input
+                type="text"
+                name="lastName"
+                value={formData.lastName}
+                onChange={handleChange}
+              />
+              <span>{errors.lastName}</span>
+            </div>
+          </div>
+
+          <div className="input-group">
+            <label>Email</label>
+            <input
+              type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+            />
+            <span>{errors.email}</span>
+          </div>
+
+          <div className="input-group">
+            <label>Mobile Number</label>
+            <input
+              type="text"
+              name="mobile"
+              value={formData.mobile}
+              onChange={handleChange}
+            />
+            <span>{errors.mobile}</span>
+          </div>
+
+          <div className="row">
+            <div className="input-group">
+              <label>Password</label>
+              <input
+                type="password"
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+              />
+              <span>{errors.password}</span>
+            </div>
+
+            <div className="input-group">
+              <label>Confirm Password</label>
+              <input
+                type="password"
+                name="confirmPassword"
+                value={formData.confirmPassword}
+                onChange={handleChange}
+              />
+              <span>{errors.confirmPassword}</span>
+            </div>
+          </div>
+
+          <div className="row">
+            <div className="input-group">
+              <label>Date of Birth</label>
+              <input
+                type="date"
+                name="dob"
+                value={formData.dob}
+                onChange={handleChange}
+              />
+              <span>{errors.dob}</span>
+            </div>
+
+            <div className="input-group">
+              <label>Gender</label>
+              <select
+                name="gender"
+                value={formData.gender}
+                onChange={handleChange}
+              >
+                <option value="">Select</option>
+                <option>Female</option>
+                <option>Male</option>
+                <option>Other</option>
+              </select>
+              <span>{errors.gender}</span>
+            </div>
+          </div>
+
+          <div className="input-group">
+            <label>Address</label>
+            <textarea
+              rows="3"
+              name="address"
+              value={formData.address}
+              onChange={handleChange}
+            ></textarea>
+            <span>{errors.address}</span>
+          </div>
+
+          <div className="input-group">
+            <label>City</label>
+            <input
+              type="text"
+              name="city"
+              value={formData.city}
+              onChange={handleChange}
+            />
+            <span>{errors.city}</span>
+          </div>
+
+          <button type="submit">
+            Register
           </button>
 
-          <button className="decrement" onClick={decrement}>
-            - Decrement
-          </button>
-        </div>
-
-        <button className="reset" onClick={reset}>
-          Reset Counter
-        </button>
-
-        <button className="theme-btn" onClick={toggleTheme}>
-          {darkMode ? "☀️ Light Theme" : "🌙 Dark Theme"}
-        </button>
-
-        <footer>
-          React Task 4 • Developed by Deepthi Prasanna
-        </footer>
+        </form>
       </div>
     </div>
   );

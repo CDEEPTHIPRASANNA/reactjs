@@ -813,4 +813,306 @@ tbody td {
   }
 } */
 
+/* Task 9 : useContext Hook Implementation  */
 
+
+:root {
+  --bg: #10121a;
+  --panel: rgba(15, 18, 34, 0.96);
+  --panel-border: rgba(139, 92, 246, 0.22);
+  --text: #e2e8f0;
+  --muted: #94a3b8;
+  --accent: #8b5cf6;
+  --accent-soft: rgba(139, 92, 246, 0.18);
+  --input-bg: rgba(15, 18, 34, 0.82);
+  --input-border: rgba(148, 163, 184, 0.18);
+  --error: #f87171;
+  --shadow: 0 36px 80px rgba(0, 0, 0, 0.32);
+}
+
+body {
+  margin: 0;
+  min-height: 100%;
+  font-family: "Inter", "Segoe UI", system-ui, sans-serif;
+  background: radial-gradient(circle at top left, rgba(139, 92, 246, 0.18), transparent 22%),
+    radial-gradient(circle at bottom right, rgba(59, 130, 246, 0.14), transparent 20%),
+    var(--bg);
+  color: var(--text);
+}
+
+body.light-mode {
+  --bg: #eef2ff;
+  --panel: rgba(255, 255, 255, 0.96);
+  --panel-border: rgba(168, 85, 247, 0.16);
+  --text: #0f172a;
+  --muted: #475569;
+  --accent: #7c3aed;
+  --accent-soft: rgba(167, 139, 250, 0.16);
+  --input-bg: rgba(255, 255, 255, 0.95);
+  --input-border: rgba(148, 163, 184, 0.22);
+  --error: #dc2626;
+  --shadow: 0 36px 80px rgba(15, 23, 42, 0.12);
+  background: radial-gradient(circle at top left, rgba(167, 139, 250, 0.18), transparent 22%),
+    radial-gradient(circle at bottom right, rgba(59, 130, 246, 0.16), transparent 18%),
+    #eef2ff;
+}
+
+body.dark-mode {
+  --bg: #10121a;
+  --panel: rgba(15, 18, 34, 0.96);
+  --panel-border: rgba(139, 92, 246, 0.22);
+  --text: #e2e8f0;
+  --muted: #94a3b8;
+  --accent: #8b5cf6;
+  --accent-soft: rgba(139, 92, 246, 0.18);
+  --input-bg: rgba(15, 18, 34, 0.82);
+  --input-border: rgba(148, 163, 184, 0.18);
+  --error: #f87171;
+  --shadow: 0 36px 80px rgba(0, 0, 0, 0.32);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 32px;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+.page-wrapper {
+  width: 100%;
+  max-width: 980px;
+}
+
+.form-card {
+  width: 100%;
+  background: var(--panel);
+  border: 1px solid var(--panel-border);
+  border-radius: 32px;
+  box-shadow: var(--shadow);
+  padding: 42px;
+  backdrop-filter: blur(18px);
+}
+
+.card-top {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 22px;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.card-icon {
+  width: 70px;
+  height: 70px;
+  display: grid;
+  place-items: center;
+  font-size: 1.75rem;
+  border-radius: 24px;
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.95), rgba(79, 70, 229, 0.92));
+  color: white;
+  box-shadow: 0 16px 40px rgba(79, 70, 229, 0.24);
+}
+
+.card-title-area h1 {
+  margin: 0;
+  font-size: clamp(2rem, 2.5vw, 2.5rem);
+  line-height: 1.04;
+}
+
+.eyebrow {
+  margin: 0 0 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.24em;
+  color: var(--accent);
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.form-subtitle {
+  margin: 12px 0 0;
+  color: var(--muted);
+  max-width: 64ch;
+  line-height: 1.7;
+}
+
+.mode-pill {
+  border: none;
+  border-radius: 999px;
+  padding: 12px 20px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.06));
+  color: var(--text);
+  cursor: pointer;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 16px;
+  margin: 24px 0 18px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.14);
+}
+
+.section-header h2 {
+  margin: 0;
+  font-size: 1rem;
+  letter-spacing: -0.02em;
+}
+
+.section-header p {
+  margin: 0;
+  color: var(--muted);
+}
+
+.success-alert {
+  background: rgba(99, 102, 241, 0.14);
+  border: 1px solid rgba(99, 102, 241, 0.28);
+  color: var(--text);
+  border-radius: 18px;
+  padding: 16px 20px;
+  margin-bottom: 24px;
+}
+
+.registration-form {
+  display: grid;
+  gap: 20px;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.field-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.field-group.full-width {
+  grid-column: 1 / -1;
+}
+
+.field-group label {
+  margin-bottom: 10px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.input-wrapper {
+  position: relative;
+}
+
+.input-wrapper .input-icon {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  background: rgba(99, 102, 241, 0.24);
+  border-radius: 16px;
+  color: var(--text);
+  font-size: 1rem;
+}
+
+.field-group input,
+.field-group select,
+.field-group textarea {
+  width: 100%;
+  min-height: 52px;
+  padding: 14px 18px 14px 56px;
+  border-radius: 18px;
+  border: 1px solid var(--input-border);
+  background: var(--input-bg);
+  color: var(--text);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.field-group textarea {
+  min-height: 120px;
+  resize: vertical;
+  padding-top: 18px;
+}
+
+.field-group input:focus,
+.field-group select:focus,
+.field-group textarea:focus {
+  outline: none;
+  border-color: rgba(139, 92, 246, 0.9);
+  box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.14);
+  transform: translateY(-1px);
+}
+
+.field-group select {
+  appearance: none;
+  background-image: linear-gradient(45deg, transparent 50%, #94a3b8 50%),
+    linear-gradient(135deg, #94a3b8 50%, transparent 50%),
+    radial-gradient(circle at top right, transparent 0, transparent 14px, #94a3b8 14px, #94a3b8 16px, transparent 16px);
+  background-repeat: no-repeat;
+  background-position: calc(100% - 18px) 50%, calc(100% - 10px) 50%, calc(100% - 22px) 50%;
+  background-size: 8px 8px, 8px 8px, 12px 12px;
+}
+
+.field-error {
+  margin-top: 8px;
+  color: var(--error);
+  font-size: 0.88rem;
+  min-height: 20px;
+}
+
+.submit-button {
+  width: 100%;
+  padding: 16px 18px;
+  border: none;
+  border-radius: 18px;
+  background: linear-gradient(135deg, #8b5cf6, #6366f1);
+  color: white;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.submit-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 16px 38px rgba(99, 102, 241, 0.28);
+}
+
+@media (max-width: 880px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 560px) {
+  .form-card {
+    padding: 28px 20px;
+  }
+
+  .card-top {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  .section-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

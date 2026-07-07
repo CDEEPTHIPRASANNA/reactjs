@@ -664,3 +664,404 @@
 
 // export default App;
 
+// Task 9 : useContext Hook Implementation 
+
+import React, { useState, useEffect } from "react";
+import "./App.css";
+
+function Icon({ name }) {
+  const icons = {
+    user: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+        <circle cx="12" cy="7" r="4" />
+      </svg>
+    ),
+    email: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M4 5h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z" />
+        <polyline points="22 7 12 13 2 7" />
+      </svg>
+    ),
+    phone: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.12 1.21.32 2.39.61 3.53a2 2 0 0 1-.45 2.11l-1.27 1.27a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c1.14.29 2.32.49 3.53.61A2 2 0 0 1 22 16.92z" />
+      </svg>
+    ),
+    lock: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="3" y="11" width="18" height="11" rx="2" />
+        <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+      </svg>
+    ),
+    calendar: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="3" y="4" width="18" height="18" rx="2" />
+        <path d="M16 2v4" />
+        <path d="M8 2v4" />
+        <path d="M3 10h18" />
+      </svg>
+    ),
+    gender: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="12" cy="12" r="4" />
+        <path d="M12 2v4" />
+        <path d="M12 18v4" />
+        <path d="M2 12h4" />
+        <path d="M18 12h4" />
+      </svg>
+    ),
+    address: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M21 10c0 6-9 12-9 12S3 16 3 10a9 9 0 0 1 18 0z" />
+        <circle cx="12" cy="10" r="3" />
+      </svg>
+    ),
+    city: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M3 22h18" />
+        <path d="M7 22V12" />
+        <path d="M11 22V8" />
+        <path d="M15 22V14" />
+        <path d="M19 22V10" />
+      </svg>
+    ),
+  };
+
+  return icons[name] || null;
+}
+
+function App() {
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    mobile: "",
+    password: "",
+    confirmPassword: "",
+    dob: "",
+    gender: "",
+    address: "",
+    city: "",
+  });
+  const [errors, setErrors] = useState({});
+  const [successMessage, setSuccessMessage] = useState("");
+  const [darkMode, setDarkMode] = useState(true);
+
+  useEffect(() => {
+    document.body.classList.toggle("light-mode", !darkMode);
+    document.body.classList.toggle("dark-mode", darkMode);
+  }, [darkMode]);
+
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    console.log("[FORM CHANGE]", name, value);
+
+    setFormData((current) => ({
+      ...current,
+      [name]: value,
+    }));
+  };
+
+  const validateForm = () => {
+    const newErrors = {};
+
+    if (!formData.firstName.trim()) {
+      newErrors.firstName = "First name is required.";
+    } else if (formData.firstName.trim().length < 2) {
+      newErrors.firstName = "Enter at least 2 characters.";
+    }
+
+    if (!formData.lastName.trim()) {
+      newErrors.lastName = "Last name is required.";
+    }
+
+    if (!formData.email.trim()) {
+      newErrors.email = "Email is required.";
+    } else if (
+      !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(formData.email)
+    ) {
+      newErrors.email = "Enter a valid email address.";
+    }
+
+    if (!formData.mobile.trim()) {
+      newErrors.mobile = "Mobile number is required.";
+    } else if (!/^\d{10}$/.test(formData.mobile)) {
+      newErrors.mobile = "Enter a valid 10-digit mobile number.";
+    }
+
+    if (!formData.password) {
+      newErrors.password = "Password is required.";
+    } else if (formData.password.length < 8) {
+      newErrors.password = "Password must be at least 8 characters.";
+    }
+
+    if (!formData.confirmPassword) {
+      newErrors.confirmPassword = "Confirm your password.";
+    } else if (formData.confirmPassword !== formData.password) {
+      newErrors.confirmPassword = "Passwords do not match.";
+    }
+
+    if (!formData.dob) {
+      newErrors.dob = "Date of birth is required.";
+    }
+
+    if (!formData.gender) {
+      newErrors.gender = "Please select a gender.";
+    }
+
+    if (!formData.address.trim()) {
+      newErrors.address = "Address is required.";
+    }
+
+    if (!formData.city.trim()) {
+      newErrors.city = "City is required.";
+    }
+
+    if (Object.keys(newErrors).length > 0) {
+      console.log("[VALIDATION ERRORS]", newErrors);
+    } else {
+      console.log("[VALIDATION SUCCESS] All fields are valid.");
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    console.log("[FORM SUBMIT] Submit button clicked.");
+
+    const isValid = validateForm();
+    if (!isValid) {
+      setSuccessMessage("");
+      console.log("[FORM SUBMIT] Submission blocked due to validation errors.");
+      return;
+    }
+
+    console.log("[FORM SUBMIT] Registration data:", formData);
+    setSuccessMessage("Employee registration completed successfully.");
+    setFormData({
+      firstName: "",
+      lastName: "",
+      email: "",
+      mobile: "",
+      password: "",
+      confirmPassword: "",
+      dob: "",
+      gender: "",
+      address: "",
+      city: "",
+    });
+    setErrors({});
+  };
+
+  const toggleTheme = () => {
+    setDarkMode((previous) => {
+      console.log(
+        "[THEME TOGGLE]",
+        previous ? "Switching to light mode" : "Switching to dark mode"
+      );
+      return !previous;
+    });
+  };
+
+  const InputField = ({
+    id,
+    label,
+    type = "text",
+    placeholder,
+    iconName,
+    options,
+    rows,
+  }) => (
+    <div className="field-group">
+      <label htmlFor={id}>{label}</label>
+      <div className="input-wrapper">
+        <span className="input-icon">
+          <Icon name={iconName} />
+        </span>
+        {type === "textarea" ? (
+          <textarea
+            id={id}
+            name={id}
+            rows={rows || 4}
+            value={formData[id]}
+            onChange={handleChange}
+            placeholder={placeholder}
+          />
+        ) : type === "select" ? (
+          <select
+            id={id}
+            name={id}
+            value={formData[id]}
+            onChange={handleChange}
+          >
+            <option value="">Select gender</option>
+            {options.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+        ) : (
+          <input
+            id={id}
+            name={id}
+            type={type}
+            value={formData[id]}
+            onChange={handleChange}
+            placeholder={placeholder}
+          />
+        )}
+      </div>
+      <span className="field-error">{errors[id]}</span>
+    </div>
+  );
+
+  return (
+    <div className={`page-wrapper ${darkMode ? "dark" : "light"}`}>
+      <div className="form-card">
+        <div className="card-top">
+          <div className="card-icon">
+            <Icon name="user" />
+          </div>
+          <div className="card-title-area">
+            <p className="eyebrow">Employee Registration</p>
+            <h1>Register a new team member</h1>
+            <p className="form-subtitle">
+              Complete all required fields for a clean, modern onboarding flow.
+            </p>
+          </div>
+          <button type="button" className="mode-pill" onClick={toggleTheme}>
+            {darkMode ? "Light Mode" : "Dark Mode"}
+          </button>
+        </div>
+
+        <section className="section-header">
+          <div>
+            <h2>Personal Information</h2>
+            <p>Enter the employee details below.</p>
+          </div>
+        </section>
+
+        {successMessage && (
+          <div className="success-alert">{successMessage}</div>
+        )}
+
+        <form className="registration-form" onSubmit={handleSubmit} noValidate>
+          <div className="form-grid">
+            <InputField
+              id="firstName"
+              label="First Name"
+              placeholder="Enter first name"
+              iconName="user"
+            />
+            <InputField
+              id="lastName"
+              label="Last Name"
+              placeholder="Enter last name"
+              iconName="user"
+            />
+          </div>
+
+          <div className="form-grid">
+            <InputField
+              id="email"
+              label="Email Address"
+              type="email"
+              placeholder="Enter email"
+              iconName="email"
+            />
+            <InputField
+              id="mobile"
+              label="Mobile Number"
+              type="tel"
+              placeholder="Enter mobile number"
+              iconName="phone"
+            />
+          </div>
+
+          <div className="form-grid">
+            <InputField
+              id="password"
+              label="Password"
+              type="password"
+              placeholder="Enter password"
+              iconName="lock"
+            />
+            <InputField
+              id="confirmPassword"
+              label="Confirm Password"
+              type="password"
+              placeholder="Confirm password"
+              iconName="lock"
+            />
+          </div>
+
+          <div className="form-grid">
+            <InputField
+              id="dob"
+              label="Date of Birth"
+              type="date"
+              iconName="calendar"
+            />
+            <InputField
+              id="gender"
+              label="Gender"
+              type="select"
+              iconName="gender"
+              options={[
+                { value: "Female", label: "Female" },
+                { value: "Male", label: "Male" },
+                { value: "Other", label: "Other" },
+              ]}
+            />
+          </div>
+
+          <div className="field-group full-width">
+            <label htmlFor="address">Address</label>
+            <div className="input-wrapper">
+              <span className="input-icon">
+                <Icon name="address" />
+              </span>
+              <textarea
+                id="address"
+                name="address"
+                rows={4}
+                value={formData.address}
+                onChange={handleChange}
+                placeholder="Enter address"
+              />
+            </div>
+            <span className="field-error">{errors.address}</span>
+          </div>
+
+          <div className="field-group full-width">
+            <label htmlFor="city">City</label>
+            <div className="input-wrapper">
+              <span className="input-icon">
+                <Icon name="city" />
+              </span>
+              <input
+                id="city"
+                name="city"
+                type="text"
+                value={formData.city}
+                onChange={handleChange}
+                placeholder="Enter city"
+              />
+            </div>
+            <span className="field-error">{errors.city}</span>
+          </div>
+
+          <button type="submit" className="submit-button">
+            Register Employee
+          </button>
+        </form>
+      </div>
+    </div>
+  );
+}
+
+export default App;

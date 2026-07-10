@@ -1,4 +1,4 @@
-import { useContext } from "react";
+﻿import { useContext } from "react";
 import { FormContext } from "../context/FormContext";
 
 function InputField({
@@ -38,6 +38,31 @@ function InputField({
             </option>
           ))}
         </select>
+      ) : type === "file" ? (
+        <div className="file-upload-wrapper">
+          <input
+            type="file"
+            name={name}
+            accept="image/*"
+            onChange={handleChange}
+            required
+            id={`file-input-${name}`}
+            style={{ display: "none" }}
+          />
+          <label htmlFor={`file-input-${name}`} className="file-input-label">
+            {formData.imagePreview ? (
+              <div className="image-preview">
+                <img src={formData.imagePreview} alt="Preview" />
+                <span className="preview-text">✓ Image selected</span>
+              </div>
+            ) : (
+              <div className="file-input-placeholder">
+                <span className="upload-icon">📸</span>
+                <span className="upload-text">Click to upload image</span>
+              </div>
+            )}
+          </label>
+        </div>
       ) : (
         <input
           type={type}

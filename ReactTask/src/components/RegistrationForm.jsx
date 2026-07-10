@@ -1,9 +1,10 @@
-import { useContext } from "react";
+﻿import { useContext, useState } from "react";
 import { FormContext } from "../context/FormContext";
 import InputField from "./InputField";
 
 function RegistrationForm() {
-  const { formData, theme } = useContext(FormContext);
+  const { formData, theme, addUser, resetForm } = useContext(FormContext);
+  const [showSuccess, setShowSuccess] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -13,15 +14,40 @@ function RegistrationForm() {
       return;
     }
 
-    alert("✅ Employee Registered Successfully!");
+    if (!formData.imagePreview) {
+      alert("❌ Please upload an image!");
+      return;
+    }
 
-    console.log("Employee Details");
-    console.table(formData);
+    if (!formData.gender) {
+      alert("❌ Please select a gender!");
+      return;
+    }
+
+    // Add user with image and gender
+    addUser({
+      firstName: formData.firstName,
+      lastName: formData.lastName,
+      email: formData.email,
+      mobile: formData.mobile,
+      dob: formData.dob,
+      city: formData.city,
+    });
+
+    setShowSuccess(true);
+    setTimeout(() => setShowSuccess(false), 3000);
+
+    console.log("Employee Details:");
+    console.table({
+      ...formData,
+      image: "Image uploaded",
+    });
+
+    resetForm();
   };
 
   return (
     <form className={`registration-form ${theme}`} onSubmit={handleSubmit}>
-
       <InputField
         label="First Name"
         name="firstName"
@@ -76,21 +102,15 @@ function RegistrationForm() {
       />
 
       <InputField
+        label="Upload Profile Picture"
+        name="image"
+        type="file"
+      />
+
+      <InputField
         label="City"
         name="city"
         placeholder="Enter City"
-      />
-
-      <InputField
-        label="State"
-        name="state"
-        placeholder="Enter State"
-      />
-
-      <InputField
-        label="Country"
-        name="country"
-        placeholder="Enter Country"
       />
 
       <InputField
@@ -100,10 +120,15 @@ function RegistrationForm() {
         placeholder="Enter Address"
       />
 
-      <button className="submit-btn">
+      <button className="submit-btn" type="submit">
         Register Employee
       </button>
 
+      {showSuccess && (
+        <div className="success-message">
+          ✅ Employee Registered Successfully!
+        </div>
+      )}
     </form>
   );
 }

@@ -1,4 +1,4 @@
-﻿
+
 const About = () => {
   const highlights = [
     { icon: "🚀", title: "Innovation", description: "We build modern web applications using the latest React technologies." },

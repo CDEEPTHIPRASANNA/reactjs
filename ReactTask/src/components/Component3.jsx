@@ -7,7 +7,7 @@ function Component3() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    alert("Form Submitted Successfully ✅");
+    alert("Form Submitted Successfully âœ…");
 
     console.log(formData);
   };

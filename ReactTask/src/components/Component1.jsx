@@ -20,7 +20,7 @@ function Component1() {
             className="theme-btn"
             onClick={toggleTheme}
           >
-            {theme === "light" ? "🌙 Dark Mode" : "☀ Light Mode"}
+            {theme === "light" ? "ðŸŒ™ Dark Mode" : "â˜€ Light Mode"}
           </button>
 
         </div>

@@ -1,4 +1,4 @@
-﻿
+
 const Profile = () => {
   const skills = ["React", "JavaScript", "CSS3", "HTML5", "Vite", "Git", "REST API", "UI/UX"];
 

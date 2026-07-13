@@ -1,4 +1,4 @@
-﻿import { determineGender, getGenderEmoji, getGenderLabel } from '../utils/genderUtils';
+import { determineGender, getGenderEmoji, getGenderLabel } from '../utils/genderUtils';
 
 function UserTable({ users = [], onProfileClick }) {
   if (!users.length) {

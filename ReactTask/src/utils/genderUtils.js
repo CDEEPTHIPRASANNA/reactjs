@@ -1,4 +1,4 @@
-﻿// Simple gender determination based on name patterns
+// Simple gender determination based on name patterns
 
 export const determineGender = (name) => {
   if (!name) return 'unknown';

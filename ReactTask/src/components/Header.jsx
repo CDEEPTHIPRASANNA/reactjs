@@ -9,7 +9,7 @@ function Header() {
     <header className={`header ${theme}`}>
       <div className="header-left">
         <div className="logo-circle">
-          👨‍💼
+          ðŸ‘¨â€ðŸ’¼
         </div>
 
         <div>

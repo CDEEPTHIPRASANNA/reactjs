@@ -1,44 +1,6 @@
-import { useState } from "react";
+﻿import React from "react";
 
-function UsersTable({ users, onDeleteUser, onSaveUser }) {
-  const [editingUserId, setEditingUserId] = useState(null);
-  const [formValues, setFormValues] = useState({
-    name: "",
-    email: "",
-    city: "",
-    role: "",
-  });
-
-  const startEdit = (user) => {
-    setEditingUserId(user.id);
-    setFormValues({
-      name: user.name,
-      email: user.email,
-      city: user.city,
-      role: user.role,
-    });
-  };
-
-  const handleFieldChange = (field, value) => {
-    setFormValues((prev) => ({ ...prev, [field]: value }));
-  };
-
-  const handleSave = () => {
-    if (!formValues.name.trim() || !formValues.email.trim() || !formValues.city.trim()) {
-      return;
-    }
-
-    onSaveUser({
-      id: editingUserId,
-      ...formValues,
-    });
-    setEditingUserId(null);
-  };
-
-  const handleCancel = () => {
-    setEditingUserId(null);
-  };
-
+function UsersTable({ users, onDeleteUser, onViewUser }) {
   return (
     <div className="table-wrapper">
       <table className="table">
@@ -56,7 +18,6 @@ function UsersTable({ users, onDeleteUser, onSaveUser }) {
           {users.length > 0 ? (
             users.map((user) => {
               const status = user.status || (user.id % 2 === 0 ? "Active" : "Inactive");
-              const editing = editingUserId === user.id;
 
               return (
                 <tr key={user.id}>
@@ -76,60 +37,25 @@ function UsersTable({ users, onDeleteUser, onSaveUser }) {
                     </div>
                   </td>
                   <td>{user.email}</td>
-                  <td>
-                    {editing ? (
-                      <input
-                        className="inline-input"
-                        value={formValues.city}
-                        onChange={(event) => handleFieldChange("city", event.target.value)}
-                      />
-                    ) : (
-                      user.city
-                    )}
-                  </td>
-                  <td>
-                    {editing ? (
-                      <select
-                        className="inline-input"
-                        value={formValues.role}
-                        onChange={(event) => handleFieldChange("role", event.target.value)}
-                      >
-                        <option>Frontend Developer</option>
-                        <option>Backend Developer</option>
-                        <option>Full Stack Developer</option>
-                        <option>UI Designer</option>
-                        <option>QA Engineer</option>
-                        <option>Project Manager</option>
-                      </select>
-                    ) : (
-                      <span className="role-pill">{user.role}</span>
-                    )}
-                  </td>
+                  <td>{user.city}</td>
+                  <td><span className="role-pill">{user.role}</span></td>
                   <td>
                     <span className={`status-badge ${status === "Active" ? "active" : "inactive"}`}>
                       {status}
                     </span>
                   </td>
                   <td>
-                    {editing ? (
-                      <div className="action-buttons">
-                        <button className="save-btn" onClick={handleSave}>
-                          Save
-                        </button>
-                        <button className="cancel-btn" onClick={handleCancel}>
-                          Cancel
-                        </button>
-                      </div>
-                    ) : (
-                      <div className="action-buttons">
-                        <button className="edit-btn" onClick={() => startEdit(user)}>
-                          Edit
-                        </button>
-                        <button className="delete-btn" onClick={() => onDeleteUser(user.id)}>
-                          Delete
-                        </button>
-                      </div>
-                    )}
+                    <div className="action-buttons">
+                      <button className="view-btn" onClick={() => onViewUser(user)} title="View details" aria-label={`View ${user.name}`}>
+                        👁
+                      </button>
+                      <button className="edit-btn" onClick={() => onViewUser(user, true)} title="Edit user" aria-label={`Edit ${user.name}`}>
+                        Edit
+                      </button>
+                      <button className="delete-btn" onClick={() => onDeleteUser(user.id)} title="Delete" aria-label={`Delete ${user.name}`}>
+                        Delete
+                      </button>
+                    </div>
                   </td>
                 </tr>
               );

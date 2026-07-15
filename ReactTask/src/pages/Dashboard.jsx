@@ -1,7 +1,32 @@
-﻿import users from "../data/users";
+﻿import { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
+import { fetchUsers } from "../utils/api";
 
 function Dashboard() {
+  const [users, setUsers] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    async function load() {
+      try {
+        const data = await fetchUsers();
+        const normalizedUsers = data.map((user) => ({
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          city: user.address?.city ?? "",
+          role: "Frontend Developer",
+        }));
+        setUsers(normalizedUsers);
+      } catch (error) {
+        console.error("Failed to load users:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+    load();
+  }, []);
+
   const totalUsers = users.length;
   const totalCities = new Set(users.map((user) => user.city)).size;
   const totalRoles = new Set(users.map((user) => user.role)).size;
@@ -25,11 +50,10 @@ function Dashboard() {
           <p className="eyebrow">UserFlow Management</p>
           <h1>Application Dashboard</h1>
           <p>
-            View your user analytics, recent team members, and key insights in a
-            streamlined dashboard experience.
+            View your user analytics from JSONPlaceholder API, recent team members, and key insights in a streamlined dashboard experience.
           </p>
           <div className="hero-badges">
-            <span>Responsive cards</span>
+            <span>API-driven data</span>
             <span>Live metrics</span>
             <span>Quick access</span>
           </div>
@@ -71,8 +95,8 @@ function Dashboard() {
         </article>
       </section>
 
-      <section className="table-card" style={{ padding: '20px 22px' }}>
-        <div className="page-topbar" style={{ alignItems: 'flex-start', gap: '12px' }}>
+      <section className="table-card" style={{ padding: "20px 22px" }}>
+        <div className="page-topbar" style={{ alignItems: "flex-start", gap: "12px" }}>
           <div className="page-heading">
             <p className="eyebrow">Recent users</p>
             <h2>Recently added team members</h2>
@@ -84,51 +108,55 @@ function Dashboard() {
           </div>
         </div>
 
-        <div className="table-wrapper" style={{ marginTop: '18px' }}>
-          <table className="table">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Email</th>
-                <th>City</th>
-                <th>Role</th>
-              </tr>
-            </thead>
-            <tbody>
-              {recentUsers.map((user) => (
-                <tr key={user.id}>
-                  <td>{user.name}</td>
-                  <td>{user.email}</td>
-                  <td>{user.city}</td>
-                  <td>{user.role}</td>
+        <div className="table-wrapper" style={{ marginTop: "18px" }}>
+          {isLoading ? (
+            <div className="empty-state">Loading users…</div>
+          ) : (
+            <table className="table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>City</th>
+                  <th>Role</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {recentUsers.map((user) => (
+                  <tr key={user.id}>
+                    <td>{user.name}</td>
+                    <td>{user.email}</td>
+                    <td>{user.city}</td>
+                    <td>{user.role}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
         </div>
       </section>
 
-      <section className="table-card" style={{ padding: '20px 22px' }}>
-        <div className="page-topbar" style={{ alignItems: 'flex-start', gap: '12px' }}>
+      <section className="table-card" style={{ padding: "20px 22px" }}>
+        <div className="page-topbar" style={{ alignItems: "flex-start", gap: "12px" }}>
           <div className="page-heading">
             <p className="eyebrow">Location overview</p>
             <h2>Users across top cities</h2>
           </div>
         </div>
 
-        <div style={{ display: 'grid', gap: '18px', marginTop: '18px' }}>
+        <div style={{ display: "grid", gap: "18px", marginTop: "18px" }}>
           {topCities.map(([city, count]) => (
-            <div key={city} style={{ display: 'grid', gap: '8px' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <div key={city} style={{ display: "grid", gap: "8px" }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                 <span>{city}</span>
                 <span>{count} users</span>
               </div>
-              <div style={{ background: '#f1f5f9', borderRadius: '999px', height: '10px', overflow: 'hidden' }}>
+              <div style={{ background: "#f1f5f9", borderRadius: "999px", height: "10px", overflow: "hidden" }}>
                 <div
                   style={{
                     width: `${Math.min(100, (count / totalUsers) * 100)}%`,
-                    height: '100%',
-                    background: 'linear-gradient(90deg, #1d4ed8, #60a5fa)',
+                    height: "100%",
+                    background: "linear-gradient(90deg, #1d4ed8, #60a5fa)",
                   }}
                 />
               </div>
